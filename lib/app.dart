@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bottom_navigation_bar/color_detail_page.dart';
 import 'package:flutter_bottom_navigation_bar/tab_item.dart';
 
 class App extends StatefulWidget {
@@ -27,6 +28,26 @@ class AppState extends State<App> {
   }
 
   Widget _buildBody() {
+    return Container(
+        color: activeTabColor[TabItem.red],
+        alignment: Alignment.center,
+        child: TextButton(
+          onPressed: _push,
+          child: const Text(
+            'PUSH',
+            style: TextStyle(fontSize: 32.0, color: Colors.white),
+          ),
+        ));
+  }
+
+  void _push() {
+    Navigator.of(context).push(MaterialPageRoute(
+      // we'll look at ColorDetailPage later
+      builder: (context) => ColorDetailPage(
+        color: activeTabColor[TabItem.red],
+        title: tabName[TabItem.red],
+      ),
+    ));
   }
 }
 
