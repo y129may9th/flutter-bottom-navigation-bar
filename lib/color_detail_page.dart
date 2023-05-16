@@ -17,7 +17,7 @@ class ColorDetailPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: color,
+        color: color![materialIndex],
       ),
     );
   }

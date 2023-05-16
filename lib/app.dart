@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bottom_navigation_bar/color_detail_page.dart';
 import 'package:flutter_bottom_navigation_bar/tab_item.dart';
+import 'package:flutter_bottom_navigation_bar/tab_navigator.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -10,6 +10,7 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
+  final navigatorKey = GlobalKey<NavigatorState>();
   var _currentTab = TabItem.red;
 
   void _selectTab(TabItem tabItem) {
@@ -19,35 +20,15 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildBody(),
+      body: TabNavigator(
+        navigatorKey: navigatorKey,
+        tabItem: _currentTab,
+      ),
       bottomNavigationBar: BottomNavigation(
         currentTab: _currentTab,
         onSelectTab: _selectTab,
       ),
     );
-  }
-
-  Widget _buildBody() {
-    return Container(
-        color: activeTabColor[TabItem.red],
-        alignment: Alignment.center,
-        child: TextButton(
-          onPressed: _push,
-          child: const Text(
-            'PUSH',
-            style: TextStyle(fontSize: 32.0, color: Colors.white),
-          ),
-        ));
-  }
-
-  void _push() {
-    Navigator.of(context).push(MaterialPageRoute(
-      // we'll look at ColorDetailPage later
-      builder: (context) => ColorDetailPage(
-        color: activeTabColor[TabItem.red],
-        title: tabName[TabItem.red],
-      ),
-    ));
   }
 }
 
@@ -80,11 +61,11 @@ class BottomNavigation extends StatelessWidget {
         Icons.layers,
         color: _colorTabMatching(tabItem),
       ),
-      label: tabName[tabItem],
+      label: tabItem.name,
     );
   }
 
   MaterialColor? _colorTabMatching(TabItem item) {
-    return currentTab == item ? activeTabColor[item] : Colors.grey;
+    return currentTab == item ? item.color : Colors.grey;
   }
 }
