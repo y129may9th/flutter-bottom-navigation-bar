@@ -41,7 +41,7 @@ class ColorsListPage extends StatelessWidget {
   Widget _buildList() {
     return ListView.builder(
         itemCount: materialIndices.length,
-        itemBuilder: (BuildContext content, int index) {
+        itemBuilder: (BuildContext context, int index) {
           int materialIndex = materialIndices[index];
           return Container(
             color: color[materialIndex],

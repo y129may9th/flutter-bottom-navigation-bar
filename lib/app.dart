@@ -10,8 +10,12 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
-  final navigatorKey = GlobalKey<NavigatorState>();
   var _currentTab = TabItem.red;
+  final _navigatorKeys = {
+    TabItem.red: GlobalKey<NavigatorState>(),
+    TabItem.green: GlobalKey<NavigatorState>(),
+    TabItem.blue: GlobalKey<NavigatorState>(),
+  };
 
   void _selectTab(TabItem tabItem) {
     setState(() => _currentTab = tabItem);
@@ -20,13 +24,24 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TabNavigator(
-        navigatorKey: navigatorKey,
-        tabItem: _currentTab,
-      ),
+      body: Stack(children: <Widget>[
+        _buildOffstageNavigator(TabItem.red),
+        _buildOffstageNavigator(TabItem.green),
+        _buildOffstageNavigator(TabItem.blue),
+      ]),
       bottomNavigationBar: BottomNavigation(
         currentTab: _currentTab,
         onSelectTab: _selectTab,
+      ),
+    );
+  }
+
+  Widget _buildOffstageNavigator(TabItem tabItem) {
+    return Offstage(
+      offstage: _currentTab != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
       ),
     );
   }
@@ -48,6 +63,7 @@ class BottomNavigation extends StatelessWidget {
         _buildItem(TabItem.green),
         _buildItem(TabItem.blue),
       ],
+      unselectedItemColor: Colors.grey,
       onTap: (index) => onSelectTab(
         // TabItem.values で enum を配列で取得できる
         TabItem.values[index],
